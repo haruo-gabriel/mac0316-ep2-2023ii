@@ -31,8 +31,8 @@ import Types (Env, Value)
 -- Para entender o funcionamento de cada parte, veja a documentação
 -- de sua respectiva implementação. É recomendado estudar cada etapa
 -- conforme a ordem de execução da interpretação.
-interp :: String -> Env -> Value
-interp = eval . desugar . analyze . parse . tokenize
+interp :: String -> Env -> Value -- define o tipo da função interp
+interp = eval . desugar . analyze . parse . tokenize -- define a função interp como composição de outras funções
 
 -- | Interpretação com ambiente vazio.
 --

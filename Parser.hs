@@ -77,7 +77,13 @@ analyze tree = case tree of
       case readMaybe token of
         Just num -> NumS num
         Nothing -> error ("ERRO analyze: número inválido: " ++ token)
-    | isSymbol token -> IdS token
+    -- Adicionando funcionalidade bool
+    | isSymbol token ->
+      case token of
+        "true" -> BoolS "true"
+        "false" -> BoolS "false"
+        _ -> IdS token
+    --
     | otherwise -> error "ERRO analyze: token inválido"
   Pair first rest -> case first of
     Leaf "+" -> PlusS (analyzePos 1) (analyzePos 2)
@@ -86,7 +92,13 @@ analyze tree = case tree of
     Leaf "~" -> UMinusS (analyzePos 1)
     Leaf "lambda" -> LamS (getSymbol 1) (analyzePos 2)
     Leaf "call" -> AppS (analyzePos 1) (analyzePos 2)
-    Leaf "if"   -> IfS (analyzePos 1) (analyzePos 2) (analyzePos 3)
+    -- Leaf "if"   -> IfS (analyzePos 1) (analyzePos 2) (analyzePos 3)
+    -- Adicionando funcionalidade if
+    Leaf "if" -> case analyzePos 1 of
+        BoolS "true" -> analyzePos 2
+        BoolS "false" -> analyzePos 3
+        _ -> error "ERRO analyze: condição do if deve ser um booleano"
+    --
     Leaf "cons" -> ConsS (analyzePos 1) (analyzePos 2)
     Leaf "head" -> HeadS (analyzePos 1)
     Leaf "tail" -> TailS (analyzePos 1)
@@ -95,6 +107,12 @@ analyze tree = case tree of
                             (getSymbol 3) (analyzePos 4)
                             (analyzePos 5)
     Leaf "letrec" -> LetrecS (getSymbol 1) (analyzePos 2) (analyzePos 3)
+    -- Adicionando funcionalidade id
+    Leaf "id" -> case analyzePos 1 of
+        IdS s -> if s `elem` ["lambda", "call", "if", "cons", "head", "tail", "let", "letrec"]
+            then error ("ERRO analyze: palavra reservada não pode ser usada como identificador: " ++ s)
+            else IdS s
+    --
     Leaf "quote"  -> QuoteS (show (tree `index` 1))
     _ -> error ("ERRO analyze: elemento da parse tree inesperado (" ++ show first ++ ")")
     where
