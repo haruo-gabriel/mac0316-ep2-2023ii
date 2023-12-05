@@ -92,12 +92,36 @@ analyze tree = case tree of
     Leaf "~" -> UMinusS (analyzePos 1)
     Leaf "lambda" -> LamS (getSymbol 1) (analyzePos 2)
     Leaf "call" -> AppS (analyzePos 1) (analyzePos 2)
-    -- Leaf "if"   -> IfS (analyzePos 1) (analyzePos 2) (analyzePos 3)
+    -- Adicionando as expressões relacionais
+    Leaf "==" -> EqS (analyzePos 1) (analyzePos 2)
+    Leaf "!=" -> NeqS (analyzePos 1) (analyzePos 2)
+    Leaf ">" -> GtS (analyzePos 1) (analyzePos 2)
+    Leaf ">=" -> GteS (analyzePos 1) (analyzePos 2)
+    Leaf "<" -> LtS (analyzePos 1) (analyzePos 2)
+    Leaf "<=" -> LteS (analyzePos 1) (analyzePos 2)
+    --
     -- Adicionando funcionalidade if
-    Leaf "if" -> case analyzePos 1 of
-        BoolS "true" -> analyzePos 2
-        BoolS "false" -> analyzePos 3
-        _ -> error "ERRO analyze: condição do if deve ser um booleano"
+    Leaf "if"   -> IfS (analyzePos 1) (analyzePos 2) (analyzePos 3)
+    --
+    -- deve verificar se o primeiro argumento é "true" ou "false" ou uma expressão relacional
+    -- se for uma expressão relacional, avaliar a expressão e verificar se é "true" ou "false"
+    -- se for "true", avaliar o segundo argumento
+    -- se for "false", avaliar o terceiro argumento
+    -- Leaf "if" -> case analyzePos 1 of
+    --     BoolS "true" -> analyzePos 2
+    --     BoolS "false" -> analyzePos 3
+    --     _ -> case analyzePos 1 of
+    --         NumS n1 -> case analyzePos 3 of
+    --             NumS n2 -> case getSymbol 2 of
+    --                 "==" -> if n1 == n2 then analyzePos 2 else analyzePos 4
+    --                 "!=" -> if n1 /= n2 then analyzePos 2 else analyzePos 4
+    --                 ">" -> if n1 > n2 then analyzePos 2 else analyzePos 4
+    --                 ">=" -> if n1 >= n2 then analyzePos 2 else analyzePos 4
+    --                 "<" -> if n1 < n2 then analyzePos 2 else analyzePos 4
+    --                 "<=" -> if n1 <= n2 then analyzePos 2 else analyzePos 4
+    --                 _ -> error ("ERRO analyze: operador relacional inválido: " ++ getSymbol 2)
+    --             _ -> error ("ERRO analyze: expressão inválida: " ++ show (analyzePos 3))
+    --         _ -> error ("ERRO analyze: expressão inválida: " ++ show (analyzePos 1))
     --
     Leaf "cons" -> ConsS (analyzePos 1) (analyzePos 2)
     Leaf "head" -> HeadS (analyzePos 1)

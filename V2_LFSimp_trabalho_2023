@@ -17,7 +17,7 @@ Software disponível (acessado em out/2023) para escrever/reconhecer a sintaxe d
 <bool>          ::= "true" | "false"
 <other_symb>    ::=  "_" | "!" | "?" | "#" 
 <reserv_symb>   ::=   "(" | ")" | "+" | "-" | "*" | "~" | "%" |
-                      "<" | ">" | "<=" | ">=" | "==" | "!=" 
+                      "<" | ">" | "<=" | ">=" | "==" | "!="
 <symbol>        ::=  <reserv_symb> | <other_symb>
 <reserv_word>   ::=  "cons" | "head" | "tail" | 
                      "if" | "let" | "letrec" | 

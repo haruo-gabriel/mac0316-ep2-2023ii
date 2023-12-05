@@ -78,3 +78,5 @@ Pair (Leaf "+") (Pair (Leaf "1") (Pair (Leaf "2") Null))
 ## Considerações finais
 
 O código deste projeto foi escrito pelo monitor de MAC0316 Eduardo Sandalo Porto no oferecimento de 2022, com base no material do livro _Programming Languages: Application and Interpretation_, por _Shriram Krishnamurthi_. Quaisquer problemas com o código ou dificuldades com o exercício podem ser passados tanto à professora quanto ao monitor. Nossos canais de contato podem ser encontrados na página da disciplina no Moodle.
+
+(if (> 9 8) (+ 1 2) (+ 10 20))

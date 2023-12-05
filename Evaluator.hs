@@ -42,6 +42,32 @@ eval exp env = case exp of
     case (eval e1 env, eval e2 env) of
       (NumV left, NumV right) -> NumV (left * right)
       (_, _)                  -> error "ERRO eval MultC: um dos argumentos não é um número"
+  -- Adicionando as expressões relacionais
+  EqC e1 e2 ->
+    case (eval e1 env, eval e2 env) of
+      (NumV left, NumV right) -> BoolV (show (left == right))
+      (_, _)                  -> error "ERRO eval EqC: um dos argumentos não é um número"
+  NeqC e1 e2 ->
+    case (eval e1 env, eval e2 env) of
+      (NumV left, NumV right) -> BoolV (show (left /= right))
+      (_, _)                  -> error "ERRO eval NeqC: um dos argumentos não é um número"
+  GtC e1 e2 ->
+    case (eval e1 env, eval e2 env) of
+      (NumV left, NumV right) -> BoolV (show (left > right))
+      (_, _)                  -> error "ERRO eval GtC: um dos argumentos não é um número"
+  GteC e1 e2 ->
+    case (eval e1 env, eval e2 env) of
+      (NumV left, NumV right) -> BoolV (show (left >= right))
+      (_, _)                  -> error "ERRO eval GteC: um dos argumentos não é um número"
+  LtC e1 e2 ->
+    case (eval e1 env, eval e2 env) of
+      (NumV left, NumV right) -> BoolV (show (left < right))
+      (_, _)                  -> error "ERRO eval LtC: um dos argumentos não é um número"
+  LteC e1 e2 ->
+    case (eval e1 env, eval e2 env) of
+      (NumV left, NumV right) -> BoolV (show (left <= right))
+      (_, _)                  -> error "ERRO eval LteC: um dos argumentos não é um número"
+  --
   LamC argName body -> ClosV argName body env
   AppC fun arg ->
     case closure of
@@ -52,7 +78,7 @@ eval exp env = case exp of
       closure  = eval fun env
       argvalue = eval arg env
 
-  --- Modificando o if
+  --- Modificando o if para avaliar expressões relacionais na condição
   IfC cond b1 b2 ->
     case eval cond env of
       BoolV bool ->
@@ -60,8 +86,16 @@ eval exp env = case exp of
           then eval b1 env
         else if bool == "false"
           then eval b2 env
-        else error "ERRO eval IfC: condição não é um booleano"
-      _ -> error "ERRO eval IfC: condição não é um booleano"
+        -- else error "ERRO eval IfC: condição não é um booleano 1"
+        else
+          case eval cond env of
+            BoolV bool ->
+              if bool == "True"
+                then eval b1 env
+              else if bool == "False"
+                then eval b2 env
+              else error "ERRO eval IfC: condição não é um booleano 1"
+      _ -> error "ERRO eval IfC: condição não é um booleano 2"
   ---
 
   ConsC e1 e2    -> ConsV (eval e1 env) (eval e2 env)

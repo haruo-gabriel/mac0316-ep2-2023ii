@@ -99,6 +99,22 @@ data ExprS
     BMinusS  { leftS :: ExprS, rightS :: ExprS }
   | -- | Representa o menos unário.
     UMinusS  { bodyS :: ExprS }
+
+  -- Inserindo os operadores relacionais
+  | -- | Representa ==
+    EqS      { leftS :: ExprS, rightS :: ExprS }
+  | -- | Representa !=
+    NeqS     { leftS :: ExprS, rightS :: ExprS }
+  | -- | Representa >
+    GtS      { leftS :: ExprS, rightS :: ExprS }
+  | -- | Representa >=
+    GteS     { leftS :: ExprS, rightS :: ExprS }
+  | -- | Representa <
+    LtS      { leftS :: ExprS, rightS :: ExprS }
+  | -- | Representa <=
+    LteS     { leftS :: ExprS, rightS :: ExprS }
+  --
+
   | -- | Representa uma função anônima (isto é, uma função sem nome).
     -- É definida na linguagem a partir do símbolo "lambda".
     LamS     { argNameS :: String, bodyS :: ExprS }
@@ -161,8 +177,25 @@ data ExprC
     PlusC   { leftC :: ExprC, rightC :: ExprC }
   | -- | Representa a operação de multiplicação.
     MultC   { leftC :: ExprC, rightC :: ExprC }
+
+  -- Inserindo os operadores relacionais
+  | -- | Representa ==
+    EqC      { leftC :: ExprC, rightC :: ExprC }
+  | -- | Representa !=
+    NeqC     { leftC :: ExprC, rightC :: ExprC }
+  | -- | Representa >
+    GtC      { leftC :: ExprC, rightC :: ExprC }
+  | -- | Representa >=
+    GteC     { leftC :: ExprC, rightC :: ExprC }
+  | -- | Representa <
+    LtC      { leftC :: ExprC, rightC :: ExprC }
+  | -- | Representa <=
+    LteC     { leftC :: ExprC, rightC :: ExprC }
+  --
+
   | -- | Representa uma função anônima (isto é, uma função sem nome).
     -- É definida na linguagem a partir do símbolo "lambda".
+
     LamC    { argNameC :: String, bodyC :: ExprC }
   | -- | Representa a aplicação de uma função.
     AppC    { funC :: ExprC, argC :: ExprC }

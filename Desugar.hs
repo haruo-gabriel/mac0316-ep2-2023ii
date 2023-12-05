@@ -34,6 +34,14 @@ desugar expr = case expr of
   MultS e1 e2    -> MultC (desugar e1) (desugar e2)
   BMinusS e1 e2  -> PlusC (desugar e1) (MultC (NumC (-1)) (desugar e2))
   UMinusS e1     -> MultC (NumC (-1)) (desugar e1)
+  -- Adicionando as expressões relacionais
+  EqS e1 e2      -> EqC (desugar e1) (desugar e2)
+  NeqS e1 e2     -> NeqC (desugar e1) (desugar e2)
+  GtS e1 e2      -> GtC (desugar e1) (desugar e2)
+  GteS e1 e2     -> GteC (desugar e1) (desugar e2)
+  LtS e1 e2      -> LtC (desugar e1) (desugar e2)
+  LteS e1 e2     -> LteC (desugar e1) (desugar e2)
+  --
   LamS argName b -> LamC argName (desugar b)
   AppS fun arg   -> AppC (desugar fun) (desugar arg)
   IfS cond b1 b2 -> IfC (desugar cond) (desugar b1) (desugar b2)
